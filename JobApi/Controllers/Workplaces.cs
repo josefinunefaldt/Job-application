@@ -15,9 +15,22 @@ namespace JobApi.Controllers
         private readonly ApplicationDbContext _context = context;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WorkplaceResponse>>> GetWorkplaces()
+        public async Task<ActionResult<IEnumerable<WorkplaceResponse>>> GetWorkplaces([FromQuery] string name)
         {
-            var workplaces = await _context.Workplaces.ToListAsync();
+            // Find the user based on the name provided
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            // Retrieve workplaces associated with the found user
+            var workplaces = await _context.Workplaces
+                .Where(workplace => workplace.UserId == user.Id) // Filter by the user's ID
+                .ToListAsync();
+
+            // Map the workplaces to WorkplaceResponse
             var response = workplaces.Select(workplace => new WorkplaceResponse
             {
                 Location = workplace.Location,
@@ -31,6 +44,7 @@ namespace JobApi.Controllers
 
             return Ok(response);
         }
+
 
         [HttpPost]
         public async Task<ActionResult<WorkplaceResponse>> CreateWorkplace([FromBody] WorkplaceRequest workplaceRequest, [FromQuery] string name)

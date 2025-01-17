@@ -91,7 +91,9 @@ export interface paths {
         };
         get: {
             parameters: {
-                query?: never;
+                query?: {
+                    name?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;

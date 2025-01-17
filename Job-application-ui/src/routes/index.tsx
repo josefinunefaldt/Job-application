@@ -23,6 +23,9 @@ function RouteComponent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, isSignedIn } = useUser();
   const [isUserCreated, setIsUserCreated] = useState(false);
+  const [previouslySignedIn, setPreviouslySignedIn] = useState<boolean | null>(
+    null
+  );
 
   useEffect(() => {
     if (isSignedIn && user) {
@@ -50,6 +53,13 @@ function RouteComponent() {
     }
   }, [isSignedIn, user]);
 
+  useEffect(() => {
+    if (previouslySignedIn === true && !isSignedIn) {
+      localStorage.removeItem("userFullName");
+    }
+    setPreviouslySignedIn(isSignedIn ?? false);
+  }, [isSignedIn, previouslySignedIn]);
+
   return (
     <>
       {isSignedIn && (
@@ -71,7 +81,7 @@ function RouteComponent() {
       </header>
       <div className="flex flex-col">
         <div className="overflow-x-auto">
-          <div className=" flex justify-end">
+          <div className="flex justify-end">
             <button
               className="btn btn-primary"
               onClick={() => setIsModalOpen(true)}

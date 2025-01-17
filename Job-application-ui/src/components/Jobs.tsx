@@ -1,4 +1,33 @@
+import React, { useEffect, useState } from "react";
+import { FetchJobs } from "../../utils/fetchJobs";
+import type { components } from "../lib/api/v1";
+
+type fetchJobs = components["schemas"]["WorkplaceResponse"];
 export const Jobs = () => {
+  const [jobs, setJobs] = useState<fetchJobs[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data: fetchJobs[] = await FetchJobs();
+
+        setJobs(data ?? []);
+      } catch (err) {
+        console.error("Error fetching jobs:", err);
+        setError("Failed to fetch jobs.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -13,27 +42,16 @@ export const Jobs = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>Test</th>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-          </tr>
-          <tr>
-            <th>Test</th>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-          </tr>
-          <tr>
-            <th>Test</th>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-            <td>Test</td>
-          </tr>
+          {jobs.map((job) => (
+            <tr key={job.id}>
+              <td>{job.position}</td>
+              <td>{job.contactPerson}</td>
+              <td>{job.email}</td>
+              <td>{job.location}</td>
+              <td>{job.notification}</td>
+              <td>{job.deadline}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
