@@ -114,7 +114,9 @@ export interface paths {
         put?: never;
         post: {
             parameters: {
-                query?: never;
+                query?: {
+                    name?: string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -196,8 +198,6 @@ export interface components {
             workplaces?: components["schemas"]["Workplace"][] | null;
         };
         UserRequest: {
-            /** Format: int32 */
-            id?: number;
             name?: string | null;
         };
         Workplace: {
@@ -210,7 +210,7 @@ export interface components {
             notification?: string | null;
             position?: string | null;
             /** Format: int32 */
-            workplaceId?: number;
+            userId?: number;
             user?: components["schemas"]["User"];
         };
         WorkplaceRequest: {

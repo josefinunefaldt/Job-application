@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Jobs } from "../components/Jobs";
-import { useState, useEffect } from "react";
 import ModalForm from "../components/ModalForm";
 import { CreateUser } from "../../utils/createuser";
 import { GetUser } from "../../utils/fetchuser";
@@ -28,7 +28,6 @@ function RouteComponent() {
     if (isSignedIn && user) {
       const initializeUser = async () => {
         try {
-          // Check if the user exists in the database using GetUser
           const existingUser = await GetUser(user.fullName!);
 
           if (existingUser?.data) {
@@ -41,6 +40,7 @@ function RouteComponent() {
             await CreateUser(userName);
             setIsUserCreated(true);
           }
+          localStorage.setItem("userFullName", user!.fullName!);
         } catch (error) {
           console.error("Error initializing user:", error);
         }

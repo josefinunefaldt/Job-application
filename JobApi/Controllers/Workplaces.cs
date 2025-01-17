@@ -33,9 +33,9 @@ namespace JobApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<WorkplaceResponse>> CreateWorkplace([FromBody] WorkplaceRequest workplaceRequest)
+        public async Task<ActionResult<WorkplaceResponse>> CreateWorkplace([FromBody] WorkplaceRequest workplaceRequest, [FromQuery] string name)
         {
-            var user = await _context.Users.FindAsync(workplaceRequest.UserId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
 
             if (user == null)
             {
@@ -50,7 +50,7 @@ namespace JobApi.Controllers
                 ContactPerson = workplaceRequest.ContactPerson,
                 Notification = workplaceRequest.Notification,
                 Position = workplaceRequest.Position,
-                User = user
+                UserId = user.Id
             };
 
             await _context.Workplaces.AddAsync(workplace);

@@ -1,7 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { ModalFormProps } from "../types/modalType";
+import { CreateWorkplace } from "../../utils/createJob";
+import { components } from "../lib/api/v1";
 
 const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
+  const [position, setPosition] = useState("");
+  const [contactPerson, setContactPerson] = useState("");
+  const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
+  const [notification, setNotification] = useState("");
+  const [deadline, setDeadline] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !position ||
+      !contactPerson ||
+      !email ||
+      !location ||
+      !notification ||
+      !deadline
+    ) {
+      console.error("All fields are required");
+      return;
+    }
+    type postWork = components["schemas"]["WorkplaceRequest"];
+    const workplaceData: postWork = {
+      position,
+      contactPerson,
+      email,
+      location,
+      notification,
+      deadline,
+    };
+
+    try {
+      await CreateWorkplace(workplaceData);
+      onClose();
+    } catch (error) {
+      console.error("Error creating workplace:", error);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -17,7 +58,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
             Add Your Job
           </h2>
         </header>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="position" className="block text-sm font-medium">
               Position
@@ -28,6 +69,8 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               name="position"
               className="input input-bordered w-full"
               placeholder="Position"
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
               required
             />
           </div>
@@ -44,6 +87,8 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               name="contactPerson"
               className="input input-bordered w-full"
               placeholder="Contact Person"
+              value={contactPerson}
+              onChange={(e) => setContactPerson(e.target.value)}
               required
             />
           </div>
@@ -57,6 +102,8 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               name="email"
               className="input input-bordered w-full"
               placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -70,38 +117,37 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               name="location"
               className="input input-bordered w-full"
               placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="notification" className="block text-sm font-medium">
-              Notification
-            </label>
-            <select
-              id="notification"
-              name="notification"
-              className="select select-bordered w-full"
-              aria-describedby="notification-help"
-              required
-            >
-              <option value="" disabled selected>
-                Select notification type
-              </option>
-              <option value="waiting">Waiting for an answer</option>
-              <option value="interview">Interview booked</option>
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
+
           <div className="mb-4">
             <label htmlFor="deadline" className="block text-sm font-medium">
               Deadline
             </label>
             <input
-              type="date"
+              type="text"
               id="deadline"
               name="deadline"
               className="input input-bordered w-full"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="Notification" className="block text-sm font-medium">
+              Notification
+            </label>
+            <input
+              type="text"
+              id="Notification"
+              name="Notification"
+              className="input input-bordered w-full"
+              value={notification}
+              onChange={(e) => setNotification(e.target.value)}
               required
             />
           </div>
