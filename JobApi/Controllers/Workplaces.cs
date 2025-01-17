@@ -107,7 +107,7 @@ namespace JobApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<WorkplaceResponse>> DeleteWorkplace(int id)
+        public async Task<ActionResult> DeleteWorkplace(int id)
         {
             var workplace = await _context.Workplaces.FindAsync(id);
 
