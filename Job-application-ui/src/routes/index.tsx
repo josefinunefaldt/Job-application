@@ -3,6 +3,7 @@ import { Jobs } from "../components/Jobs";
 import { useState, useEffect } from "react";
 import ModalForm from "../components/ModalForm";
 import { CreateUser } from "../../utils/createuser";
+import { GetUser } from "../../utils/fetchuser";
 import {
   SignedIn,
   SignedOut,
@@ -25,33 +26,41 @@ function RouteComponent() {
 
   useEffect(() => {
     if (isSignedIn && user) {
-      const createUserAsync = async () => {
+      const initializeUser = async () => {
         try {
-          const userPayload: postUser = {
-            name: user.fullName!,
-          };
-          await CreateUser(userPayload);
-          setIsUserCreated(true);
+          // Check if the user exists in the database using GetUser
+          const existingUser = await GetUser(user.fullName!);
+
+          if (existingUser?.data) {
+            console.log("User exists:", existingUser.data);
+            setIsUserCreated(true);
+          } else {
+            const userName: postUser = {
+              name: user.fullName!,
+            };
+            await CreateUser(userName);
+            setIsUserCreated(true);
+          }
         } catch (error) {
-          console.error("Error creating user:", error);
+          console.error("Error initializing user:", error);
         }
       };
 
-      createUserAsync();
+      initializeUser();
     }
   }, [isSignedIn, user]);
 
   return (
     <>
-      {isSignedIn}(
-      <>
-        {isUserCreated ? (
-          <div>Hello {user!.fullName}!</div>
-        ) : (
-          <p>Creating user...</p>
-        )}
-      </>
-      )
+      {isSignedIn && (
+        <>
+          {isUserCreated ? (
+            <div>Hello {user!.fullName}!</div>
+          ) : (
+            <p>Checking user...</p>
+          )}
+        </>
+      )}
       <header>
         <SignedOut>
           <SignInButton />
