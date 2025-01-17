@@ -15,6 +15,6 @@ namespace JobApi.Models
         public required string Notification { get; set; }
         public required string Position { get; set; }
         public int WorkplaceId { get; set; }
-        public virtual User user { get; set; }
+        public virtual User User { get; set; }
     }
 }

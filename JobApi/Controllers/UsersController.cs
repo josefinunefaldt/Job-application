@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JobApi.Data;
-using JobApi.Models;
 using Microsoft.AspNetCore.Mvc;
+using JobApi.Models;
+using JobApi.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobApi.Controllers
@@ -19,25 +15,33 @@ namespace JobApi.Controllers
         {
             _context = context;
         }
+
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser([FromBody] string name)
+        public async Task<IActionResult> CreateUser([FromBody] UserRequest userRequest)
         {
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
+            if (userRequest == null || string.IsNullOrEmpty(userRequest.Name))
+            {
+                return BadRequest("Invalid input.");
+            }
+
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Name == userRequest.Name);
+
             if (existingUser != null)
             {
                 return Conflict("A user with this name already exists.");
             }
-
             var user = new User
             {
-                Name = name
+                Name = userRequest.Name
             };
-
             _context.Users.Add(user);
+
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUserByName), new { name = user.Name }, user);
+            return CreatedAtAction(nameof(GetUserByName), new { name = user.Name }, new { userId = user.Id, name = user.Name });
         }
+
 
         [HttpGet("{name}")]
         public async Task<ActionResult<User>> GetUserByName(string name)
@@ -46,10 +50,10 @@ namespace JobApi.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
 
-            return Ok(user);
+            return user;
         }
     }
 }

@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Jobs = () => (
   <div className="overflow-x-auto">
     <table className="table">

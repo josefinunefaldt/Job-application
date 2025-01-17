@@ -50,7 +50,7 @@ namespace JobApi.Controllers
                 ContactPerson = workplaceRequest.ContactPerson,
                 Notification = workplaceRequest.Notification,
                 Position = workplaceRequest.Position,
-                user = user
+                User = user
             };
 
             await _context.Workplaces.AddAsync(workplace);
