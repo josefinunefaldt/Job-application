@@ -5,8 +5,9 @@ export const Jobs = () => (
     <table className="table">
       <thead>
         <tr>
-          <th>Job</th>
+          <th>Position</th>
           <th>Contact Person</th>
+          <th>Email</th>
           <th>Location</th>
           <th>Notification</th>
           <th>Deadline</th>

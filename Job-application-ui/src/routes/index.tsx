@@ -1,15 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Jobs } from "../components/Jobs";
+import { useState } from "react";
+import ModalForm from "../components/ModalForm";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <div className="mt-9 flex flex-col">
+    <div className="flex flex-col">
       <div className="overflow-x-auto">
-        <button className="btn btn-neutral float-end mb-4 ml-auto">Add</button>
+        <div className=" flex justify-end">
+          <button
+            className="btn btn-primary"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Add Workplace
+          </button>
+          <ModalForm
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+          />
+        </div>
         <Jobs />
       </div>
     </div>
