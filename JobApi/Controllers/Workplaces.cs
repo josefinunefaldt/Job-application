@@ -17,7 +17,6 @@ namespace JobApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WorkplaceResponse>>> GetWorkplaces([FromQuery] string name)
         {
-            // Find the user based on the name provided
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Name == name);
 
             if (user == null)
@@ -25,12 +24,10 @@ namespace JobApi.Controllers
                 return NotFound("User not found");
             }
 
-            // Retrieve workplaces associated with the found user
             var workplaces = await _context.Workplaces
-                .Where(workplace => workplace.UserId == user.Id) // Filter by the user's ID
+                .Where(workplace => workplace.UserId == user.Id)
                 .ToListAsync();
 
-            // Map the workplaces to WorkplaceResponse
             var response = workplaces.Select(workplace => new WorkplaceResponse
             {
                 Location = workplace.Location,
@@ -107,6 +104,22 @@ namespace JobApi.Controllers
             };
 
             return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<WorkplaceResponse>> DeleteWorkplace(int id)
+        {
+            var workplace = await _context.Workplaces.FindAsync(id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            _context.Remove(workplace);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
