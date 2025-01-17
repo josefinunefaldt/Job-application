@@ -9,7 +9,6 @@ namespace JobApi.Models
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-
         public List<Workplace> Workplaces { get; set; } = [];
     }
 }
