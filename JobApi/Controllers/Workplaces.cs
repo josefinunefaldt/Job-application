@@ -14,6 +14,43 @@ namespace JobApi.Controllers
     {
         private readonly ApplicationDbContext _context = context;
 
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<WorkplaceResponse>> UpdateWorkplace(int id, [FromBody] WorkplaceRequest workplaceRequest)
+        {
+            var workplace = await _context.Workplaces.FindAsync(id);
+
+            if (workplace == null)
+            {
+                return NotFound();
+            }
+
+            workplace.ContactPerson = workplaceRequest.ContactPerson;
+            workplace.Deadline = workplaceRequest.Deadline;
+            workplace.Email = workplaceRequest.Email;
+            workplace.InterviewDate = workplaceRequest.InterviewDate;
+            workplace.Status = workplaceRequest.Status;
+            workplace.Position = workplaceRequest.Position;
+            workplace.Location = workplaceRequest.Location;
+
+            _context.Update(workplace);
+            await _context.SaveChangesAsync();
+
+            WorkplaceResponse workplaceResponse = new WorkplaceResponse()
+            {
+                ContactPerson = workplaceRequest.ContactPerson,
+                Deadline = workplaceRequest.Deadline,
+                Email = workplaceRequest.Email,
+                InterviewDate = workplaceRequest.InterviewDate,
+                Status = workplaceRequest.Status,
+                Position = workplaceRequest.Position,
+                Location = workplaceRequest.Location
+            };
+
+            return Ok(workplaceResponse);
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WorkplaceResponse>>> GetWorkplaces([FromQuery] string name)
         {
