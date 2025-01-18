@@ -32,6 +32,7 @@ namespace JobApi.Controllers
             workplace.Status = workplaceRequest.Status;
             workplace.Position = workplaceRequest.Position;
             workplace.Location = workplaceRequest.Location;
+            workplace.StatusTimeStamp = workplaceRequest.StatusTimeStamp;
 
             _context.Update(workplace);
             await _context.SaveChangesAsync();
@@ -44,7 +45,8 @@ namespace JobApi.Controllers
                 InterviewDate = workplaceRequest.InterviewDate,
                 Status = workplaceRequest.Status,
                 Position = workplaceRequest.Position,
-                Location = workplaceRequest.Location
+                Location = workplaceRequest.Location,
+                StatusTimeStamp = workplaceRequest.StatusTimeStamp
             };
 
             return Ok(workplaceResponse);
@@ -75,6 +77,7 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
+                StatusTimeStamp = workplace.StatusTimeStamp
             }).ToList();
 
             return Ok(response);
@@ -101,6 +104,7 @@ namespace JobApi.Controllers
                 Position = workplaceRequest.Position,
                 UserId = user.Id,
                 InterviewDate = workplaceRequest.InterviewDate,
+                StatusTimeStamp = workplaceRequest.StatusTimeStamp
             };
 
             await _context.Workplaces.AddAsync(workplace);
@@ -116,6 +120,7 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
+                StatusTimeStamp = workplace.StatusTimeStamp
             };
 
             return CreatedAtAction(nameof(GetWorkPlace), new { id = workplace.Id }, response);
@@ -142,6 +147,7 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
+                StatusTimeStamp = workplace.StatusTimeStamp
             };
 
             return Ok(response);

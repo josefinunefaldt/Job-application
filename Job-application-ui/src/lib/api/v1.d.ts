@@ -259,6 +259,7 @@ export interface components {
             email?: string | null;
             contactPerson?: string | null;
             status?: string | null;
+            statusTimeStamp?: string | null;
             position?: string | null;
             /** Format: int32 */
             userId?: number;
@@ -273,6 +274,7 @@ export interface components {
             email?: string | null;
             contactPerson?: string | null;
             status?: string | null;
+            statusTimeStamp?: string | null;
             position?: string | null;
             /** Format: int32 */
             userId?: number;
@@ -286,6 +288,7 @@ export interface components {
             email?: string | null;
             contactPerson?: string | null;
             status?: string | null;
+            statusTimeStamp?: string | null;
             position?: string | null;
         };
     };

@@ -16,6 +16,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
   const [status, setStatus] = useState("");
   const [deadline, setDeadline] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
+  const [statusTimestamp, setStatusTimestamp] = useState<string>("");
 
   useEffect(() => {
     if (existingJob) {
@@ -26,8 +27,15 @@ const ModalForm: React.FC<ModalFormProps> = ({
       setStatus(existingJob?.status ?? "");
       setDeadline(existingJob?.deadline ?? "");
       setInterviewDateTime(existingJob?.interviewDate ?? "");
+      setStatusTimestamp(existingJob?.statusTimeStamp ?? "");
     }
   }, [existingJob]);
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+    setStatusTimestamp(new Date().toISOString());
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +67,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
       deadline,
       interviewDate:
         status === "interview booked" ? interviewDateTime : undefined,
+      statusTimeStamp: status ? new Date().toISOString() : null,
     };
 
     try {
@@ -177,7 +186,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               name="status"
               className="select select-bordered w-full"
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={handleStatusChange}
               required
             >
               <option value="" disabled>

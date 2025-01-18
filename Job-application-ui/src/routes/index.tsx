@@ -22,7 +22,6 @@ type postUser = components["schemas"]["User"];
 function RouteComponent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, isSignedIn } = useUser();
-  const [isUserCreated, setIsUserCreated] = useState(false);
   const [previouslySignedIn, setPreviouslySignedIn] = useState<boolean | null>(
     null
   );
@@ -35,13 +34,11 @@ function RouteComponent() {
 
           if (existingUser?.data) {
             console.log("User exists:", existingUser.data);
-            setIsUserCreated(true);
           } else {
             const userName: postUser = {
               name: user.fullName!,
             };
             await CreateUser(userName);
-            setIsUserCreated(true);
           }
           localStorage.setItem("userFullName", user!.fullName!);
         } catch (error) {
@@ -62,16 +59,7 @@ function RouteComponent() {
 
   return (
     <>
-      {isSignedIn && (
-        <>
-          {isUserCreated ? (
-            <div>Hello {user!.fullName}!</div>
-          ) : (
-            <p>Checking user...</p>
-          )}
-        </>
-      )}
-      <header>
+      <header className="">
         <SignedOut>
           <SignInButton />
         </SignedOut>
@@ -91,6 +79,7 @@ function RouteComponent() {
             <ModalForm
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
+              existingJob={null}
             />
           </div>
           <Jobs />

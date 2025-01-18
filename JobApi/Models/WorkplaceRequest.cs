@@ -14,6 +14,7 @@ namespace JobApi.Models
         public required string Email { get; set; }
         public required string ContactPerson { get; set; }
         public required string Status { get; set; }
+        public string? StatusTimeStamp { get; set; }
         public required string Position { get; set; }
         public int UserId { get; set; }
     }
