@@ -183,7 +183,26 @@ export interface paths {
         };
         put?: never;
         post?: never;
-        delete?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -207,10 +226,13 @@ export interface components {
             id?: number;
             location?: string | null;
             deadline?: string | null;
+            interviewDate?: string | null;
             email?: string | null;
             contactPerson?: string | null;
-            notification?: string | null;
+            status?: string | null;
             position?: string | null;
+            /** Format: int32 */
+            myProperty?: number;
             /** Format: int32 */
             userId?: number;
             user?: components["schemas"]["User"];
@@ -220,9 +242,10 @@ export interface components {
             id?: number;
             location?: string | null;
             deadline?: string | null;
+            interviewDate?: string | null;
             email?: string | null;
             contactPerson?: string | null;
-            notification?: string | null;
+            status?: string | null;
             position?: string | null;
             /** Format: int32 */
             userId?: number;
@@ -232,9 +255,10 @@ export interface components {
             id?: number;
             location?: string | null;
             deadline?: string | null;
+            interviewDate?: string | null;
             email?: string | null;
             contactPerson?: string | null;
-            notification?: string | null;
+            status?: string | null;
             position?: string | null;
         };
     };

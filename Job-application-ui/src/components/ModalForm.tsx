@@ -8,21 +8,26 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
   const [contactPerson, setContactPerson] = useState("");
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
-  const [notification, setNotification] = useState("");
+  const [status, setStatus] = useState("");
   const [deadline, setDeadline] = useState("");
-
+  const [interviewDateTime, setInterviewDateTime] = useState("");
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (
       !position ||
       !contactPerson ||
       !email ||
       !location ||
-      !notification ||
+      !status ||
       !deadline
     ) {
       console.error("All fields are required");
+      return;
+    }
+    if (status === "interview booked" && !interviewDateTime) {
+      console.error(
+        "Interview Date & Time is required when the status is 'interview booked'"
+      );
       return;
     }
     type postWork = components["schemas"]["WorkplaceRequest"];
@@ -31,8 +36,10 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
       contactPerson,
       email,
       location,
-      notification,
+      status,
       deadline,
+      interviewDate:
+        status === "interview booked" ? interviewDateTime : undefined,
     };
 
     try {
@@ -128,7 +135,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               Deadline
             </label>
             <input
-              type="text"
+              type="date"
               id="deadline"
               name="deadline"
               className="input input-bordered w-full"
@@ -137,20 +144,51 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
               required
             />
           </div>
+
           <div className="mb-4">
-            <label htmlFor="Notification" className="block text-sm font-medium">
-              Notification
+            <label htmlFor="status" className="block text-sm font-medium">
+              Status
             </label>
-            <input
-              type="text"
-              id="Notification"
-              name="Notification"
-              className="input input-bordered w-full"
-              value={notification}
-              onChange={(e) => setNotification(e.target.value)}
+            <select
+              id="status"
+              name="status"
+              className="select select-bordered w-full"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
               required
-            />
+            >
+              <option value="" disabled>
+                Select status
+              </option>
+              <option value="waiting for an answer">
+                Waiting for an answer
+              </option>
+              <option value="interview booked">Interview booked</option>
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
           </div>
+
+          {status === "interview booked" && (
+            <div className="mb-4">
+              <label
+                htmlFor="interviewDateTime"
+                className="block text-sm font-medium"
+              >
+                Interview Date & Time
+              </label>
+              <input
+                type="datetime-local"
+                id="interviewDateTime"
+                name="interviewDateTime"
+                className="input input-bordered w-full"
+                value={interviewDateTime}
+                onChange={(e) => setInterviewDateTime(e.target.value)}
+                required={status === "interview booked"}
+              />
+            </div>
+          )}
+
           <footer className="flex justify-end gap-2">
             <button
               type="button"

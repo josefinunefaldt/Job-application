@@ -34,9 +34,10 @@ namespace JobApi.Controllers
                 Deadline = workplace.Deadline,
                 Email = workplace.Email,
                 ContactPerson = workplace.ContactPerson,
-                Notification = workplace.Notification,
+                Status = workplace.Status,
                 Position = workplace.Position,
-                Id = workplace.Id
+                Id = workplace.Id,
+                InterviewDate = workplace.InterviewDate,
             }).ToList();
 
             return Ok(response);
@@ -59,9 +60,10 @@ namespace JobApi.Controllers
                 Deadline = workplaceRequest.Deadline,
                 Email = workplaceRequest.Email,
                 ContactPerson = workplaceRequest.ContactPerson,
-                Notification = workplaceRequest.Notification,
+                Status = workplaceRequest.Status,
                 Position = workplaceRequest.Position,
-                UserId = user.Id
+                UserId = user.Id,
+                InterviewDate = workplaceRequest.InterviewDate,
             };
 
             await _context.Workplaces.AddAsync(workplace);
@@ -73,9 +75,10 @@ namespace JobApi.Controllers
                 Deadline = workplace.Deadline,
                 Email = workplace.Email,
                 ContactPerson = workplace.ContactPerson,
-                Notification = workplace.Notification,
+                Status = workplace.Status,
                 Position = workplace.Position,
-                Id = workplace.Id
+                Id = workplace.Id,
+                InterviewDate = workplace.InterviewDate,
             };
 
             return CreatedAtAction(nameof(GetWorkPlace), new { id = workplace.Id }, response);
@@ -98,9 +101,10 @@ namespace JobApi.Controllers
                 Deadline = workplace.Deadline,
                 Email = workplace.Email,
                 ContactPerson = workplace.ContactPerson,
-                Notification = workplace.Notification,
+                Status = workplace.Status,
                 Position = workplace.Position,
-                Id = workplace.Id
+                Id = workplace.Id,
+                InterviewDate = workplace.InterviewDate,
             };
 
             return Ok(response);
