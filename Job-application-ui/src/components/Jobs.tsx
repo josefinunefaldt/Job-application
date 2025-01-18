@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { FetchJobs } from "../../utils/fetchJobs";
 import type { components } from "../lib/api/v1";
+import ModalForm from "./ModalForm";
 
 type fetchJobs = components["schemas"]["WorkplaceResponse"];
 
 export const Jobs = () => {
   const [jobs, setJobs] = useState<fetchJobs[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<fetchJobs | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,42 +39,69 @@ export const Jobs = () => {
     return "N/A";
   };
 
+  const handleUpdate = (job: fetchJobs) => {
+    setSelectedJob(job);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedJob(null);
+  };
+
   return (
-    <div className="overflow-x-auto">
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Contact Person</th>
-            <th>Email</th>
-            <th>Location</th>
-            <th>Status</th>
-
-            {hasInterviewDate && <th>Interview Date</th>}
-            <th>Deadline</th>
-          </tr>
-        </thead>
-        <tbody>
-          {jobs.map((job) => (
-            <tr key={job.id}>
-              <td>{job.position}</td>
-              <td>{job.contactPerson}</td>
-              <td>{job.email}</td>
-              <td>{job.location}</td>
-              <td>{job.status}</td>
-
-              {hasInterviewDate && (
-                <td>
-                  {job.interviewDate
-                    ? formatInterviewDate(job.interviewDate)
-                    : "N/A"}
-                </td>
-              )}
-              <td>{job.deadline}</td>
+    <div>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Contact Person</th>
+              <th>Email</th>
+              <th>Location</th>
+              <th>Status</th>
+              {hasInterviewDate && <th>Interview Date</th>}
+              <th>Deadline</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {jobs.map((job) => (
+              <tr key={job.id}>
+                <td>{job.position}</td>
+                <td>{job.contactPerson}</td>
+                <td>{job.email}</td>
+                <td>{job.location}</td>
+                <td>{job.status}</td>
+
+                {hasInterviewDate && (
+                  <td>
+                    {job.interviewDate
+                      ? formatInterviewDate(job.interviewDate)
+                      : "N/A"}
+                  </td>
+                )}
+                <td>{job.deadline}</td>
+                <td>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleUpdate(job)}
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {isModalOpen && selectedJob && (
+        <ModalForm
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          existingJob={selectedJob}
+        />
+      )}
     </div>
   );
 };

@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ModalFormProps } from "../types/modalType";
 import { CreateWorkplace } from "../../utils/createJob";
+import { UpdateWorkplace } from "../../utils/updateJob";
 import { components } from "../lib/api/v1";
 
-const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
+const ModalForm: React.FC<ModalFormProps> = ({
+  isOpen,
+  onClose,
+  existingJob,
+}) => {
   const [position, setPosition] = useState("");
   const [contactPerson, setContactPerson] = useState("");
   const [email, setEmail] = useState("");
@@ -11,6 +16,19 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
   const [status, setStatus] = useState("");
   const [deadline, setDeadline] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
+
+  useEffect(() => {
+    if (existingJob) {
+      setPosition(existingJob?.position ?? "");
+      setContactPerson(existingJob?.contactPerson ?? "");
+      setEmail(existingJob?.email ?? "");
+      setLocation(existingJob?.location ?? "");
+      setStatus(existingJob?.status ?? "");
+      setDeadline(existingJob?.deadline ?? "");
+      setInterviewDateTime(existingJob?.interviewDate ?? "");
+    }
+  }, [existingJob]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
@@ -30,6 +48,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
       );
       return;
     }
+
     type postWork = components["schemas"]["WorkplaceRequest"];
     const workplaceData: postWork = {
       position,
@@ -43,10 +62,14 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
     };
 
     try {
-      await CreateWorkplace(workplaceData);
+      if (existingJob) {
+        await UpdateWorkplace(existingJob.id!, workplaceData);
+      } else {
+        await CreateWorkplace(workplaceData);
+      }
       onClose();
     } catch (error) {
-      console.error("Error creating workplace:", error);
+      console.error("Error saving workplace:", error);
     }
   };
 
@@ -62,7 +85,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-lg p-6 w-96 shadow-lg" role="document">
         <header className="mb-4">
           <h2 id="modal-title" className="text-xl font-bold">
-            Add Your Job
+            {existingJob ? "Edit Job" : "Add Your Job"}
           </h2>
         </header>
         <form onSubmit={handleSubmit}>
