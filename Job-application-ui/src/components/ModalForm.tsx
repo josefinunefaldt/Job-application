@@ -238,6 +238,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                   <option value="interview booked">Interview booked</option>
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
+                  <option value="Draft">Draft</option>
                 </select>
               </div>
               <div>

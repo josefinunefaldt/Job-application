@@ -2,7 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-.highlight {
-  background-color: #ffeb3b;
+.highlight-info {
+  background-color: rgba(59, 130, 246, 0.8);
   color: black;
+}
+
+.highlight-error {
+  background-color: rgba(239, 68, 68, 0.8);
+  color: black;
+}
+
+.highlight-success {
+  background-color: rgba(34, 197, 94, 0.8);
+  color: black;
+}
+
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  animation:
+    fadeIn 0.5s ease-in-out,
+    fadeOut 0.5s ease-in-out 3.5s forwards;
+}
+
+.toast-info {
+  background-color: rgba(59, 130, 246, 0.8);
+}
+
+.toast-success {
+  background-color: rgba(34, 197, 94, 0.8);
+}
+
+.toast-error {
+  background-color: rgba(239, 68, 68, 0.8);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

@@ -1,6 +1,4 @@
-import { components } from "../lib/api/v1";
-
-type fetchJobs = components["schemas"]["WorkplaceResponse"];
+import { fetchJobs } from "../..//src/types/workplaceResponseType";
 
 export type ModalFormProps = {
   isOpen: boolean;
