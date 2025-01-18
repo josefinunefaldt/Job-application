@@ -3,6 +3,9 @@ import { FetchJobs } from "../../utils/fetchJobs";
 import { DeleteJob } from "../../utils/deletejob";
 import type { components } from "../lib/api/v1";
 import ModalForm from "./ModalForm";
+import { checkPendingStatus } from "../../utils/notificationCalculator";
+import { formatInterviewDate } from "../../utils/dateFormatter";
+import { getRowClass } from "../../utils/rowupdate";
 
 type fetchJobs = components["schemas"]["WorkplaceResponse"];
 
@@ -29,18 +32,10 @@ export const Jobs = () => {
 
   const hasInterviewDate = jobs.some((job) => job.interviewDate);
 
-  const formatInterviewDate = (date: string | undefined) => {
-    if (date) {
-      const formattedDate = new Date(date).toLocaleString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      return formattedDate;
-    }
-    return "N/A";
+  const handleJobstatus = () => {
+    jobs.forEach((job) => {
+      checkPendingStatus(job);
+    });
   };
 
   const handleUpdate = (job: fetchJobs) => {
@@ -80,13 +75,13 @@ export const Jobs = () => {
           </thead>
           <tbody>
             {jobs.map((job) => (
-              <tr key={job.id}>
+              <tr key={job.id} className={getRowClass(job)}>
+                {" "}
                 <td>{job.position}</td>
                 <td>{job.contactPerson}</td>
                 <td>{job.email}</td>
                 <td>{job.location}</td>
                 <td>{job.status}</td>
-
                 {hasInterviewDate && (
                   <td>
                     {job.interviewDate
@@ -114,6 +109,7 @@ export const Jobs = () => {
           </tbody>
         </table>
       </div>
+      <button onClick={handleJobstatus}>Check for Pending Jobs</button>
       {isModalOpen && selectedJob && (
         <ModalForm
           isOpen={isModalOpen}

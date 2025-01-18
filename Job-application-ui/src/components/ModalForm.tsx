@@ -67,7 +67,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
       deadline,
       interviewDate:
         status === "interview booked" ? interviewDateTime : undefined,
-      statusTimeStamp: status ? new Date().toISOString() : null,
+      statusTimeStamp: status
+        ? new Date(new Date().setDate(new Date().getDate() - 14)).toISOString()
+        : null,
     };
 
     try {
