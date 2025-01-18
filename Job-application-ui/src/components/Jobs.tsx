@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FetchJobs } from "../../utils/fetchJobs";
+import { DeleteJob } from "../../utils/deletejob";
 import type { components } from "../lib/api/v1";
 import ModalForm from "./ModalForm";
 
@@ -21,6 +22,9 @@ export const Jobs = () => {
     };
 
     fetchData();
+    const intervalId = setInterval(fetchData, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const hasInterviewDate = jobs.some((job) => job.interviewDate);
@@ -49,6 +53,15 @@ export const Jobs = () => {
     setSelectedJob(null);
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await DeleteJob(id);
+      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+    } catch {
+      console.error("Error deleting job:");
+    }
+  };
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -62,7 +75,7 @@ export const Jobs = () => {
               <th>Status</th>
               {hasInterviewDate && <th>Interview Date</th>}
               <th>Deadline</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -88,6 +101,12 @@ export const Jobs = () => {
                     onClick={() => handleUpdate(job)}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="btn btn-danger ml-2"
+                    onClick={() => handleDelete(job.id!)}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>
