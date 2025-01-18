@@ -4,6 +4,8 @@ import { CreateWorkplace } from "../../utils/createJob";
 import { UpdateWorkplace } from "../../utils/updateJob";
 import { components } from "../lib/api/v1";
 
+type postWork = components["schemas"]["WorkplaceRequest"];
+
 const ModalForm: React.FC<ModalFormProps> = ({
   isOpen,
   onClose,
@@ -13,6 +15,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
   const [contactPerson, setContactPerson] = useState("");
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
+  const [company, setCompany] = useState("");
+  const [link, setLink] = useState("");
   const [status, setStatus] = useState("");
   const [deadline, setDeadline] = useState("");
   const [interviewDateTime, setInterviewDateTime] = useState("");
@@ -24,6 +28,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
       setContactPerson(existingJob?.contactPerson ?? "");
       setEmail(existingJob?.email ?? "");
       setLocation(existingJob?.location ?? "");
+      setCompany(existingJob?.company ?? "");
+      setLink(existingJob?.link ?? "");
       setStatus(existingJob?.status ?? "");
       setDeadline(existingJob?.deadline ?? "");
       setInterviewDateTime(existingJob?.interviewDate ?? "");
@@ -44,6 +50,8 @@ const ModalForm: React.FC<ModalFormProps> = ({
       !contactPerson ||
       !email ||
       !location ||
+      !company ||
+      !link ||
       !status ||
       !deadline
     ) {
@@ -56,13 +64,13 @@ const ModalForm: React.FC<ModalFormProps> = ({
       );
       return;
     }
-
-    type postWork = components["schemas"]["WorkplaceRequest"];
     const workplaceData: postWork = {
       position,
       contactPerson,
       email,
       location,
+      company,
+      link,
       status,
       deadline,
       interviewDate:
@@ -93,137 +101,182 @@ const ModalForm: React.FC<ModalFormProps> = ({
       role="dialog"
       aria-modal="true"
     >
-      <div className="bg-white rounded-lg p-6 w-96 shadow-lg" role="document">
-        <header className="mb-4">
-          <h2 id="modal-title" className="text-xl font-bold">
+      <div
+        className="bg-white rounded-lg p-6 w-full max-w-3xl shadow-lg"
+        role="document"
+      >
+        <header className="mb-6">
+          <h2 id="modal-title" className="text-2xl font-bold">
             {existingJob ? "Edit Job" : "Add Your Job"}
           </h2>
         </header>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="position" className="block text-sm font-medium">
-              Position
-            </label>
-            <input
-              type="text"
-              id="position"
-              name="position"
-              className="input input-bordered w-full"
-              placeholder="Position"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="contactPerson"
-              className="block text-sm font-medium"
-            >
-              Contact Person
-            </label>
-            <input
-              type="text"
-              id="contactPerson"
-              name="contactPerson"
-              className="input input-bordered w-full"
-              placeholder="Contact Person"
-              value={contactPerson}
-              onChange={(e) => setContactPerson(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="input input-bordered w-full"
-              placeholder="Your Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium">
-              Location
-            </label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              className="input input-bordered w-full"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="deadline" className="block text-sm font-medium">
-              Deadline
-            </label>
-            <input
-              type="date"
-              id="deadline"
-              name="deadline"
-              className="input input-bordered w-full"
-              value={deadline}
-              onChange={(e) => setDeadline(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium">
-              Status
-            </label>
-            <select
-              id="status"
-              name="status"
-              className="select select-bordered w-full"
-              value={status}
-              onChange={handleStatusChange}
-              required
-            >
-              <option value="" disabled>
-                Select status
-              </option>
-              <option value="waiting for an answer">
-                Waiting for an answer
-              </option>
-              <option value="interview booked">Interview booked</option>
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
-
-          {status === "interview booked" && (
-            <div className="mb-4">
-              <label
-                htmlFor="interviewDateTime"
-                className="block text-sm font-medium"
-              >
-                Interview Date & Time
-              </label>
-              <input
-                type="datetime-local"
-                id="interviewDateTime"
-                name="interviewDateTime"
-                className="input input-bordered w-full"
-                value={interviewDateTime}
-                onChange={(e) => setInterviewDateTime(e.target.value)}
-                required={status === "interview booked"}
-              />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <fieldset className="border rounded-lg p-4">
+            <legend className="text-lg font-semibold">Job Details</legend>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="position" className="block text-sm font-medium">
+                  Position
+                </label>
+                <input
+                  type="text"
+                  id="position"
+                  name="position"
+                  className="input input-bordered w-full"
+                  placeholder="Position"
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="company" className="block text-sm font-medium">
+                  Company
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  className="input input-bordered w-full"
+                  placeholder="Company Name"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="location" className="block text-sm font-medium">
+                  Location
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  name="location"
+                  className="input input-bordered w-full"
+                  placeholder="Location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="link" className="block text-sm font-medium">
+                  Link
+                </label>
+                <input
+                  type="url"
+                  id="link"
+                  name="link"
+                  className="input input-bordered w-full"
+                  placeholder="Job Link"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
+                  required
+                />
+              </div>
             </div>
-          )}
+          </fieldset>
+          <fieldset className="border rounded-lg p-4">
+            <legend className="text-lg font-semibold">Contact Details</legend>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="contactPerson"
+                  className="block text-sm font-medium"
+                >
+                  Contact Person
+                </label>
+                <input
+                  type="text"
+                  id="contactPerson"
+                  name="contactPerson"
+                  className="input input-bordered w-full"
+                  placeholder="Contact Person"
+                  value={contactPerson}
+                  onChange={(e) => setContactPerson(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  className="input input-bordered w-full"
+                  placeholder="Your Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+          </fieldset>
+          <fieldset className="border rounded-lg p-4">
+            <legend className="text-lg font-semibold">Status & Deadline</legend>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="status" className="block text-sm font-medium">
+                  Status
+                </label>
+                <select
+                  id="status"
+                  name="status"
+                  className="select select-bordered w-full"
+                  value={status}
+                  onChange={handleStatusChange}
+                  required
+                >
+                  <option value="" disabled>
+                    Select status
+                  </option>
+                  <option value="waiting for an answer">
+                    Waiting for an answer
+                  </option>
+                  <option value="interview booked">Interview booked</option>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="deadline" className="block text-sm font-medium">
+                  Deadline
+                </label>
+                <input
+                  type="date"
+                  id="deadline"
+                  name="deadline"
+                  className="input input-bordered w-full"
+                  value={deadline}
+                  onChange={(e) => setDeadline(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+            {status === "interview booked" && (
+              <div className="mt-4">
+                <label
+                  htmlFor="interviewDateTime"
+                  className="block text-sm font-medium"
+                >
+                  Interview Date & Time
+                </label>
+                <input
+                  type="datetime-local"
+                  id="interviewDateTime"
+                  name="interviewDateTime"
+                  className="input input-bordered w-full"
+                  value={interviewDateTime}
+                  onChange={(e) => setInterviewDateTime(e.target.value)}
+                  required={status === "interview booked"}
+                />
+              </div>
+            )}
+          </fieldset>
 
-          <footer className="flex justify-end gap-2">
+          <footer className="flex justify-end gap-4">
             <button
               type="button"
               className="btn btn-secondary"

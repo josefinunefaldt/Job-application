@@ -10,6 +10,8 @@ namespace JobApi.Models
         public int Id { get; set; }
         public required string Location { get; set; }
         public required string Deadline { get; set; }
+        public string? Company { get; set; }
+        public string? Link { get; set; }
         public string? InterviewDate { get; set; }
         public required string Email { get; set; }
         public required string ContactPerson { get; set; }

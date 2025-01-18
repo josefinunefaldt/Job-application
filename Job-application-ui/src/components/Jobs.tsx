@@ -68,6 +68,8 @@ export const Jobs = () => {
               <th>Email</th>
               <th>Location</th>
               <th>Status</th>
+              <th>Company</th>
+              <th>Link</th>
               {hasInterviewDate && <th>Interview Date</th>}
               <th>Deadline</th>
               <th>Actions</th>
@@ -82,6 +84,12 @@ export const Jobs = () => {
                 <td>{job.email}</td>
                 <td>{job.location}</td>
                 <td>{job.status}</td>
+                <td>{job.company}</td>
+                <td>
+                  <a href={job.link!} target="_blank" rel="noopener noreferrer">
+                    View Job
+                  </a>
+                </td>
                 {hasInterviewDate && (
                   <td>
                     {job.interviewDate

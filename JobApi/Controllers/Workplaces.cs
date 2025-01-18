@@ -33,6 +33,8 @@ namespace JobApi.Controllers
             workplace.Position = workplaceRequest.Position;
             workplace.Location = workplaceRequest.Location;
             workplace.StatusTimeStamp = workplaceRequest.StatusTimeStamp;
+            workplace.Link = workplaceRequest.Link;
+            workplace.Company = workplaceRequest.Company;
 
             _context.Update(workplace);
             await _context.SaveChangesAsync();
@@ -46,7 +48,10 @@ namespace JobApi.Controllers
                 Status = workplaceRequest.Status,
                 Position = workplaceRequest.Position,
                 Location = workplaceRequest.Location,
-                StatusTimeStamp = workplaceRequest.StatusTimeStamp
+                StatusTimeStamp = workplaceRequest.StatusTimeStamp,
+                Link = workplace.Link,
+                Company = workplace.Company
+
             };
 
             return Ok(workplaceResponse);
@@ -77,7 +82,10 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
-                StatusTimeStamp = workplace.StatusTimeStamp
+                StatusTimeStamp = workplace.StatusTimeStamp,
+                Link = workplace.Link,
+                Company = workplace.Company
+
             }).ToList();
 
             return Ok(response);
@@ -104,7 +112,9 @@ namespace JobApi.Controllers
                 Position = workplaceRequest.Position,
                 UserId = user.Id,
                 InterviewDate = workplaceRequest.InterviewDate,
-                StatusTimeStamp = workplaceRequest.StatusTimeStamp
+                StatusTimeStamp = workplaceRequest.StatusTimeStamp,
+                Link = workplaceRequest.Link,
+                Company = workplaceRequest.Company
             };
 
             await _context.Workplaces.AddAsync(workplace);
@@ -120,7 +130,9 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
-                StatusTimeStamp = workplace.StatusTimeStamp
+                StatusTimeStamp = workplace.StatusTimeStamp,
+                Link = workplace.Link,
+                Company = workplace.Company
             };
 
             return CreatedAtAction(nameof(GetWorkPlace), new { id = workplace.Id }, response);
@@ -147,7 +159,9 @@ namespace JobApi.Controllers
                 Position = workplace.Position,
                 Id = workplace.Id,
                 InterviewDate = workplace.InterviewDate,
-                StatusTimeStamp = workplace.StatusTimeStamp
+                StatusTimeStamp = workplace.StatusTimeStamp,
+                Link = workplace.Link,
+                Company = workplace.Company
             };
 
             return Ok(response);

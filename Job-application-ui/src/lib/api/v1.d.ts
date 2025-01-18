@@ -255,6 +255,8 @@ export interface components {
             id?: number;
             location?: string | null;
             deadline?: string | null;
+            company?: string | null;
+            link?: string | null;
             interviewDate?: string | null;
             email?: string | null;
             contactPerson?: string | null;
@@ -273,6 +275,8 @@ export interface components {
             interviewDate?: string | null;
             email?: string | null;
             contactPerson?: string | null;
+            company?: string | null;
+            link?: string | null;
             status?: string | null;
             statusTimeStamp?: string | null;
             position?: string | null;
@@ -288,6 +292,8 @@ export interface components {
             email?: string | null;
             contactPerson?: string | null;
             status?: string | null;
+            company?: string | null;
+            link?: string | null;
             statusTimeStamp?: string | null;
             position?: string | null;
         };
