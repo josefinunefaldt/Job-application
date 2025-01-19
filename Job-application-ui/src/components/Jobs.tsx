@@ -12,7 +12,7 @@ export const Jobs = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<fetchJobs | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [toastQueue, setToastQueue] = useState<Toast[]>([]);
+  const [isFiltered, setIsFiltered] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,43 +24,20 @@ export const Jobs = () => {
       }
     };
 
-    fetchData();
-    const intervalId = setInterval(fetchData, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
+    if (!isFiltered) {
+      fetchData();
+    }
+  }, [isFiltered]);
 
   const hasInterviewDate = jobs.some((job) => job.interviewDate);
 
   const addToast = (message: string, type: "info" | "success" | "error") => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { message, type, id };
-    setToastQueue((prevQueue) => [...prevQueue, newToast]);
-  };
-
-  useEffect(() => {
-    const processToasts = () => {
-      if (toastQueue.length > 0) {
-        const toast = toastQueue[0];
-
-        setToasts((prevToasts) => [...prevToasts, toast]);
-
-        setTimeout(() => {
-          setToasts((prevToasts) =>
-            prevToasts.filter((t) => t.id !== toast.id)
-          );
-          setToastQueue((prevQueue) => prevQueue.slice(1));
-        }, 5000);
-      }
-    };
-
-    processToasts();
-  }, [toastQueue]);
-
-  const handleJobstatus = () => {
-    jobs.forEach((job) => {
-      checkPendingStatus(job, addToast);
-    });
+    setToasts((prevToasts) => [...prevToasts, newToast]);
+    setTimeout(() => {
+      setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+    }, 5000);
   };
 
   const handleUpdate = (job: fetchJobs) => {
@@ -73,6 +50,40 @@ export const Jobs = () => {
     setSelectedJob(null);
   };
 
+  const filterJobInterview = async () => {
+    try {
+      const data: fetchJobs[] = await FetchJobs();
+      setJobs(data.filter((job) => job.status === "interview booked"));
+      setIsFiltered(true);
+    } catch (error) {
+      console.error("Error filtering jobs:", error);
+    }
+  };
+
+  const filterNoAnswer = async () => {
+    try {
+      const data: fetchJobs[] = await FetchJobs();
+      setJobs(data.filter((job) => job.status === "waiting for an answer"));
+      setIsFiltered(true);
+    } catch (error) {
+      console.error("Error filtering jobs:", error);
+    }
+  };
+
+  const filterDraft = async () => {
+    try {
+      const data: fetchJobs[] = await FetchJobs();
+      setJobs(data.filter((job) => job.status === "Draft"));
+      setIsFiltered(true);
+    } catch (error) {
+      console.error("Error filtering jobs:", error);
+    }
+  };
+
+  const reset = () => {
+    setIsFiltered(false);
+  };
+
   const handleDelete = async (id: number) => {
     try {
       await DeleteJob(id);
@@ -82,8 +93,40 @@ export const Jobs = () => {
     }
   };
 
+  const hasNotifications = (job: fetchJobs) => {
+    const currentDate = new Date();
+    const statusTimeStamp = new Date(job.statusTimeStamp || "");
+    const interviewDate = new Date(job.interviewDate || "");
+    const deadline = new Date(job.deadline || "");
+    const twoWeeksAgo = new Date(
+      currentDate.getTime() - 14 * 24 * 60 * 60 * 1000
+    );
+
+    const timeDifference =
+      (deadline.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+    const timeForJob =
+      (interviewDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    return (
+      (job.status === "Draft" && timeDifference <= 2 && timeDifference >= 0) ||
+      (job.status === "Draft" && timeDifference < 0) ||
+      (job.status === "waiting for an answer" &&
+        statusTimeStamp <= twoWeeksAgo) ||
+      (job.status === "interview booked" && timeForJob <= 2 && timeForJob >= 0)
+    );
+  };
+
+  const handleCheckNotification = (job: fetchJobs) => {
+    checkPendingStatus(job, addToast);
+  };
+
   return (
     <div className="p-4">
+      <button onClick={filterJobInterview}>Filter job interview</button>
+      <button onClick={filterNoAnswer}>No answer</button>
+      <button onClick={filterDraft}>Draft</button>
+      <button onClick={reset}>Reset</button>
+
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -97,6 +140,7 @@ export const Jobs = () => {
               <th>Link</th>
               {hasInterviewDate && <th>Interview Date</th>}
               <th>Deadline</th>
+              <th>Notifications</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -148,6 +192,16 @@ export const Jobs = () => {
                 )}
                 <td>{job.deadline}</td>
                 <td>
+                  {hasNotifications(job) && (
+                    <button
+                      onClick={() => handleCheckNotification(job)}
+                      className="btn btn-primary"
+                    >
+                      Check Notifications
+                    </button>
+                  )}
+                </td>
+                <td>
                   <button
                     className="btn btn-warning"
                     onClick={() => handleUpdate(job)}
@@ -167,10 +221,6 @@ export const Jobs = () => {
         </table>
       </div>
 
-      <button onClick={handleJobstatus} className="btn btn-primary mt-4">
-        Check Pending Jobs
-      </button>
-
       <div className="toast-container">
         {toasts.map((toast) => (
           <div
@@ -187,7 +237,6 @@ export const Jobs = () => {
           </div>
         ))}
       </div>
-
       {isModalOpen && selectedJob && (
         <ModalForm
           isOpen={isModalOpen}

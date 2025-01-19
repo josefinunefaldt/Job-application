@@ -12,7 +12,7 @@ export const Route = createRootRoute({
         >
           Home
         </Link>
-        {/* <Link to="/about">About</Link> */}
+        <Link to="/jobs">Work</Link>
       </div>
       <Outlet />
     </>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Jobs } from "../components/Jobs";
-import ModalForm from "../components/ModalForm";
 import { CreateUser } from "../../utils/createuser";
 import { GetUser } from "../../utils/fetchuser";
 import {
@@ -20,7 +18,6 @@ export const Route = createFileRoute("/")({
 type postUser = components["schemas"]["User"];
 
 function RouteComponent() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, isSignedIn } = useUser();
   const [previouslySignedIn, setPreviouslySignedIn] = useState<boolean | null>(
     null
@@ -67,24 +64,6 @@ function RouteComponent() {
           <UserButton />
         </SignedIn>
       </header>
-      <div className="flex flex-col">
-        <div className="overflow-x-auto">
-          <div className="flex justify-end">
-            <button
-              className="btn btn-primary"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Add Workplace
-            </button>
-            <ModalForm
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              existingJob={null}
-            />
-          </div>
-          <Jobs />
-        </div>
-      </div>
     </>
   );
 }
