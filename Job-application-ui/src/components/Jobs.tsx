@@ -3,7 +3,6 @@ import { FetchJobs } from "../../utils/fetchJobs";
 import { DeleteJob } from "../../utils/deletejob";
 import ModalForm from "./ModalForm";
 import { checkPendingStatus } from "../../utils/notificationCalculator";
-import { formatInterviewDate } from "../../utils/dateFormatter";
 import { Toast } from "../types/toastType";
 import { fetchJobs } from "../types/workplaceResponseType";
 
@@ -11,6 +10,7 @@ export const Jobs = () => {
   const [jobs, setJobs] = useState<fetchJobs[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<fetchJobs | null>(null);
+  const [infoJob, setInfoJob] = useState<fetchJobs | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
 
@@ -29,8 +29,6 @@ export const Jobs = () => {
     }
   }, [isFiltered]);
 
-  const hasInterviewDate = jobs.some((job) => job.interviewDate);
-
   const addToast = (message: string, type: "info" | "success" | "error") => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { message, type, id };
@@ -48,6 +46,10 @@ export const Jobs = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedJob(null);
+  };
+
+  const handleCloseInfo = () => {
+    setInfoJob(null);
   };
 
   const filterJobInterview = async () => {
@@ -121,129 +123,201 @@ export const Jobs = () => {
   };
 
   return (
-    <div className="p-4">
-      <button onClick={filterJobInterview}>Filter job interview</button>
-      <button onClick={filterNoAnswer}>No answer</button>
-      <button onClick={filterDraft}>Draft</button>
-      <button onClick={reset}>Reset</button>
-
-      <div className="overflow-x-auto">
-        <table className="table w-full">
-          <thead>
-            <tr>
-              <th>Position</th>
-              <th>Contact Person</th>
-              <th>Email</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Company</th>
-              <th>Link</th>
-              {hasInterviewDate && <th>Interview Date</th>}
-              <th>Deadline</th>
-              <th>Notifications</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map((job) => (
-              <tr
-                key={job.id}
-                className={
-                  job.status === "Draft" &&
-                  job.deadline &&
-                  (new Date(job.deadline).getTime() - new Date().getTime()) /
-                    (1000 * 60 * 60 * 24) <=
-                    2
-                    ? "highlight-error"
-                    : job.status === "waiting for an answer" &&
-                        job.statusTimeStamp &&
-                        new Date(job.statusTimeStamp) <=
-                          new Date(
-                            new Date().getTime() - 14 * 24 * 60 * 60 * 1000
-                          )
-                      ? "highlight-info"
-                      : job.status === "interview booked" &&
-                          job.interviewDate &&
-                          (new Date(job.interviewDate).getTime() -
-                            new Date().getTime()) /
-                            (1000 * 60 * 60 * 24) <=
-                            2
-                        ? "highlight-success"
-                        : ""
-                }
-              >
-                <td>{job.position}</td>
-                <td>{job.contactPerson}</td>
-                <td>{job.email}</td>
-                <td>{job.location}</td>
-                <td>{job.status}</td>
-                <td>{job.company}</td>
-                <td>
-                  <a href={job.link!} target="_blank" rel="noopener noreferrer">
-                    View Job
-                  </a>
-                </td>
-                {hasInterviewDate && (
-                  <td>
-                    {job.interviewDate
-                      ? formatInterviewDate(job.interviewDate)
-                      : "N/A"}
-                  </td>
-                )}
-                <td>{job.deadline}</td>
-                <td>
-                  {hasNotifications(job) && (
-                    <button
-                      onClick={() => handleCheckNotification(job)}
-                      className="btn btn-primary"
-                    >
-                      Check Notifications
-                    </button>
-                  )}
-                </td>
-                <td>
-                  <button
-                    className="btn btn-warning"
-                    onClick={() => handleUpdate(job)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-danger ml-2"
-                    onClick={() => handleDelete(job.id!)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
+    <div>
       <div className="toast-container">
         {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`toast ${
-              toast.type === "info"
-                ? "toast-info"
-                : toast.type === "success"
-                  ? "toast-success"
-                  : "toast-error"
-            }`}
-          >
+          <div key={toast.id} className={`toast ${toast.type}`}>
             {toast.message}
           </div>
         ))}
       </div>
-      {isModalOpen && selectedJob && (
-        <ModalForm
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          existingJob={selectedJob}
-        />
-      )}
+      <div className="p-4 mt-6">
+        <div className="mb-4">
+          <button
+            onClick={filterJobInterview}
+            className="btn mr-2  text-[#F4E4BA] bg-[#5f7470]"
+          >
+            Job interview
+          </button>
+          <button
+            onClick={filterNoAnswer}
+            className="btn mr-2 text-[#F4E4BA] bg-[#5f7470]"
+          >
+            No answer
+          </button>
+          <button
+            onClick={filterDraft}
+            className="btn mr-2  text-[#F4E4BA]  bg-[#5f7470]"
+          >
+            Draft
+          </button>
+          <button
+            onClick={reset}
+            className="btn mr-2  text-[#F4E4BA] bg-[#5f7470]"
+          >
+            All
+          </button>
+          <button
+            className="btn bg-[#FFCF56] text-[#5f7470]"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Add Workplace
+          </button>
+          <ModalForm
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            existingJob={null}
+          />
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="table-auto w-full border-separate border-spacing-0">
+            <thead>
+              <tr>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Position
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Location
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Status
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Company
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Link
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Deadline
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center">
+                  Notifications
+                </th>
+                <th className="border-b border-[#5f7470] p-2 text-center"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.map((job) => (
+                <tr key={job.id} className="text-center">
+                  <td className="border-b border-[#5f7470] p-2">
+                    {job.position}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    {job.location}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    {job.status}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    {job.company}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    <a
+                      href={job.link!}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View Job
+                    </a>
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    {job.deadline}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    {hasNotifications(job) && (
+                      <button
+                        onClick={() => handleCheckNotification(job)}
+                        className="btn bg-[#FFCF56]"
+                      >
+                        Next step
+                      </button>
+                    )}
+                  </td>
+                  <td className="border-b border-[#5f7470] p-2">
+                    <button className=" p-0" onClick={() => setInfoJob(job)}>
+                      <img
+                        src="./information-button.png"
+                        alt="Info"
+                        className="w-6 h-6"
+                      />
+                    </button>
+                    <button className="ml-2" onClick={() => handleUpdate(job)}>
+                      <img src="./pen.png" alt="Edit" className="w-6 h-6" />
+                    </button>
+
+                    <button
+                      className="ml-2 p-0"
+                      onClick={() => handleDelete(job.id!)}
+                    >
+                      <img src="./trash.png" alt="Delete" className="w-6 h-6" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {infoJob && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white rounded-lg p-6 w-96">
+              <h2 className="text-lg font-bold mb-4">Job Details</h2>
+              <p>
+                <strong>Position:</strong> {infoJob.position}
+              </p>
+              <p>
+                <strong>Location:</strong> {infoJob.location}
+              </p>
+              <p>
+                <strong>Company:</strong> {infoJob.company}
+              </p>
+              <p>
+                <strong>Contact Person:</strong> {infoJob.contactPerson}
+              </p>
+              <p>
+                <strong>Email:</strong> {infoJob.email}
+              </p>
+              <p>
+                <strong>Link:</strong>{" "}
+                <a
+                  href={infoJob.link!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Job Link
+                </a>
+              </p>
+              <p>
+                <strong>Status:</strong> {infoJob.status}
+              </p>
+              <p>
+                <strong>Deadline:</strong> {infoJob.deadline}
+              </p>
+              {infoJob.interviewDate && (
+                <p>
+                  <strong>Interview Date:</strong> {infoJob.interviewDate}
+                </p>
+              )}
+              <button
+                onClick={handleCloseInfo}
+                className="mt-4 btn bg-[#5f7470] text-[#F4E4BA]"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isModalOpen && selectedJob && (
+          <ModalForm
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            existingJob={selectedJob}
+          />
+        )}
+      </div>
     </div>
   );
 };

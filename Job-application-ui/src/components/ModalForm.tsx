@@ -102,27 +102,35 @@ const ModalForm: React.FC<ModalFormProps> = ({
       aria-modal="true"
     >
       <div
-        className="bg-white rounded-lg p-6 w-full max-w-3xl shadow-lg"
+        className="bg-[#5f7470] rounded-lg p-6 w-full max-w-3xl shadow-lg"
         role="document"
       >
         <header className="mb-6">
-          <h2 id="modal-title" className="text-2xl font-bold">
-            {existingJob ? "Edit Job" : "Add Your Job"}
+          <h2
+            id="modal-title"
+            className="  text-[#F4E4BA] index-text text-2xl font-bold"
+          >
+            {existingJob ? "Edit Job" : "Add your job here"}
           </h2>
         </header>
         <form onSubmit={handleSubmit} className="space-y-6">
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold">Job Details</legend>
+            <legend className="text-lg font-semibold index-text  text-[#F4E4BA] ">
+              JOB DETAILS
+            </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="position" className="block text-sm font-medium">
+                <label
+                  htmlFor="position"
+                  className=" text-[#F4E4BA] block text-sm font-medium"
+                >
                   Position
                 </label>
                 <input
                   type="text"
                   id="position"
                   name="position"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Position"
                   value={position}
                   onChange={(e) => setPosition(e.target.value)}
@@ -177,7 +185,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold">Contact Details</legend>
+            <legend className="text-lg font-semibold index-text ">
+              CONTACT DETAILS
+            </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
@@ -215,7 +225,9 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold">Status & Deadline</legend>
+            <legend className="text-lg font-semibold index-text ">
+              STATUS AND DEADLINE
+            </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="status" className="block text-sm font-medium">
@@ -280,12 +292,15 @@ const ModalForm: React.FC<ModalFormProps> = ({
           <footer className="flex justify-end gap-4">
             <button
               type="button"
-              className="btn btn-secondary"
+              className="btn bg-[#FFCF56] border-0 text-[#5f7470]"
               onClick={onClose}
             >
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button
+              type="submit"
+              className="btn text-[#5f7470] border-0  bg-[#F4E4BA]"
+            >
               Submit
             </button>
           </footer>
