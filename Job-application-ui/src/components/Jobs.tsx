@@ -135,7 +135,7 @@ export const Jobs = () => {
         <div className="mb-4">
           <button
             onClick={filterJobInterview}
-            className="btn mr-2  text-[#F4E4BA] bg-[#5f7470]"
+            className="btn mr-2  text-[#F4E4BA] hover:opacity-50 bg-[#5f7470]"
           >
             Job interview
           </button>
@@ -262,47 +262,49 @@ export const Jobs = () => {
 
         {infoJob && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded-lg p-6 w-96">
-              <h2 className="text-lg font-bold mb-4">Job Details</h2>
-              <p>
+            <div className="bg-[#5f7470] rounded-lg p-6 w-96">
+              <h2 className="text-lg index-text font-bold mb-4  text-[#F4E4BA]">
+                JOB DETAILS
+              </h2>
+              <p className="  text-[#F4E4BA]">
                 <strong>Position:</strong> {infoJob.position}
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Location:</strong> {infoJob.location}
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Company:</strong> {infoJob.company}
               </p>
-              <p>
-                <strong>Contact Person:</strong> {infoJob.contactPerson}
+              <p className="  text-[#F4E4BA]">
+                <strong>Contact person:</strong> {infoJob.contactPerson}
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Email:</strong> {infoJob.email}
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Link:</strong>{" "}
                 <a
                   href={infoJob.link!}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Job Link
+                  Job link
                 </a>
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Status:</strong> {infoJob.status}
               </p>
-              <p>
+              <p className="  text-[#F4E4BA]">
                 <strong>Deadline:</strong> {infoJob.deadline}
               </p>
               {infoJob.interviewDate && (
-                <p>
+                <p className="  text-[#F4E4BA]">
                   <strong>Interview Date:</strong> {infoJob.interviewDate}
                 </p>
               )}
               <button
                 onClick={handleCloseInfo}
-                className="mt-4 btn bg-[#5f7470] text-[#F4E4BA]"
+                className="mt-4 btn bg-[#FFCF56] border-0 text-[#5f7470]"
               >
                 Close
               </button>

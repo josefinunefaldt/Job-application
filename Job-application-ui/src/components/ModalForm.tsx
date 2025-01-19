@@ -96,16 +96,16 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      className="fixed inset-0  bg-black bg-opacity-50 flex justify-center  items-center z-50"
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="bg-[#5f7470] rounded-lg p-6 w-full max-w-3xl shadow-lg"
+        className="bg-[#5f7470]  bg-opacity-100 rounded-lg p-3  overflow-auto shadow-lg"
         role="document"
       >
-        <header className="mb-6">
+        <header className="mb-4">
           <h2
             id="modal-title"
             className="  text-[#F4E4BA] index-text text-2xl font-bold"
@@ -138,14 +138,17 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="company" className="block text-sm font-medium">
+                <label
+                  htmlFor="company"
+                  className="block  text-[#F4E4BA] text-sm font-medium"
+                >
                   Company
                 </label>
                 <input
                   type="text"
                   id="company"
                   name="company"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Company Name"
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
@@ -153,14 +156,17 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="location" className="block text-sm font-medium">
+                <label
+                  htmlFor="location"
+                  className="block  text-[#F4E4BA] text-sm font-medium"
+                >
                   Location
                 </label>
                 <input
                   type="text"
                   id="location"
                   name="location"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Location"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -168,14 +174,17 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="link" className="block text-sm font-medium">
+                <label
+                  htmlFor="link"
+                  className="block  text-[#F4E4BA] text-sm font-medium"
+                >
                   Link
                 </label>
                 <input
                   type="url"
                   id="link"
                   name="link"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Job Link"
                   value={link}
                   onChange={(e) => setLink(e.target.value)}
@@ -185,22 +194,22 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold index-text ">
+            <legend className="text-lg font-semibold  text-[#F4E4BA] index-text ">
               CONTACT DETAILS
             </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="contactPerson"
-                  className="block text-sm font-medium"
+                  className="block text-sm font-medium  text-[#F4E4BA]"
                 >
-                  Contact Person
+                  Contact person
                 </label>
                 <input
                   type="text"
                   id="contactPerson"
                   name="contactPerson"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Contact Person"
                   value={contactPerson}
                   onChange={(e) => setContactPerson(e.target.value)}
@@ -208,14 +217,17 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium">
+                <label
+                  htmlFor="email"
+                  className="block  text-[#F4E4BA] text-sm font-medium"
+                >
                   Email
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   placeholder="Your Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -225,18 +237,21 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold index-text ">
+            <legend className="text-lg font-semibold index-text  text-[#F4E4BA] ">
               STATUS AND DEADLINE
             </legend>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="status" className="block text-sm font-medium">
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium  text-[#F4E4BA]"
+                >
                   Status
                 </label>
                 <select
                   id="status"
                   name="status"
-                  className="select select-bordered w-full"
+                  className="select select-bordered w-full bg-[#F4E4BA]"
                   value={status}
                   onChange={handleStatusChange}
                   required
@@ -254,14 +269,17 @@ const ModalForm: React.FC<ModalFormProps> = ({
                 </select>
               </div>
               <div>
-                <label htmlFor="deadline" className="block text-sm font-medium">
+                <label
+                  htmlFor="deadline"
+                  className="block  text-[#F4E4BA] text-sm font-medium"
+                >
                   Deadline
                 </label>
                 <input
                   type="date"
                   id="deadline"
                   name="deadline"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA] "
                   value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
                   required
@@ -272,7 +290,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div className="mt-4">
                 <label
                   htmlFor="interviewDateTime"
-                  className="block text-sm font-medium"
+                  className="block text-sm font-medium  text-[#F4E4BA]"
                 >
                   Interview Date & Time
                 </label>
@@ -280,7 +298,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                   type="datetime-local"
                   id="interviewDateTime"
                   name="interviewDateTime"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   value={interviewDateTime}
                   onChange={(e) => setInterviewDateTime(e.target.value)}
                   required={status === "interview booked"}
