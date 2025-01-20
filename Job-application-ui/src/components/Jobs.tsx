@@ -219,7 +219,9 @@ export const Jobs = () => {
                 <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Notifications
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center job-text"></th>
+                <th className="border-b border-[#5f7470] p-2  job-text text-right">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
