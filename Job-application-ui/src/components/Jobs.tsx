@@ -5,7 +5,8 @@ import ModalForm from "./ModalForm";
 import { checkPendingStatus } from "../../utils/notificationCalculator";
 import { Toast } from "../types/toastType";
 import { fetchJobs } from "../types/workplaceResponseType";
-
+import { filterJobsByStatus } from "../../utils/filter";
+import { hasNotifications } from "../../utils/hasNotafications";
 export const Jobs = () => {
   const [jobs, setJobs] = useState<fetchJobs[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +37,7 @@ export const Jobs = () => {
     setToasts((prevToasts) => [...prevToasts, newToast]);
     setTimeout(() => {
       setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-    }, 5000);
+    }, 3000);
   };
 
   const handleUpdate = (job: fetchJobs) => {
@@ -54,23 +55,15 @@ export const Jobs = () => {
   };
 
   const filterJobInterview = async () => {
-    try {
-      const data: fetchJobs[] = await FetchJobs();
-      setJobs(data.filter((job) => job.status === "interview booked"));
-      setIsFiltered(true);
-    } catch (error) {
-      console.error("Error filtering jobs:", error);
-    }
+    const jobs = await filterJobsByStatus("interview booked");
+    setJobs(jobs);
+    setIsFiltered(true);
   };
 
   const filterNoAnswer = async () => {
-    try {
-      const data: fetchJobs[] = await FetchJobs();
-      setJobs(data.filter((job) => job.status === "waiting for an answer"));
-      setIsFiltered(true);
-    } catch (error) {
-      console.error("Error filtering jobs:", error);
-    }
+    const jobs = await filterJobsByStatus("waiting for an answer");
+    setJobs(jobs);
+    setIsFiltered(true);
   };
 
   const [highlightedJobId, setHighlightedJobId] = useState<number | null>(null);
@@ -82,17 +75,13 @@ export const Jobs = () => {
     setTimeout(() => {
       setIsOpacityChanged(false);
       setHighlightedJobId(null);
-    }, 5000);
+    }, 3000);
   };
 
   const filterDraft = async () => {
-    try {
-      const data: fetchJobs[] = await FetchJobs();
-      setJobs(data.filter((job) => job.status === "Draft"));
-      setIsFiltered(true);
-    } catch (error) {
-      console.error("Error filtering jobs:", error);
-    }
+    const jobs = await filterJobsByStatus("Draft");
+    setJobs(jobs);
+    setIsFiltered(true);
   };
 
   const reset = () => {
@@ -108,28 +97,28 @@ export const Jobs = () => {
     }
   };
 
-  const hasNotifications = (job: fetchJobs) => {
-    const currentDate = new Date();
-    const statusTimeStamp = new Date(job.statusTimeStamp || "");
-    const interviewDate = new Date(job.interviewDate || "");
-    const deadline = new Date(job.deadline || "");
-    const twoWeeksAgo = new Date(
-      currentDate.getTime() - 14 * 24 * 60 * 60 * 1000
-    );
+  // const hasNotifications = (job: fetchJobs) => {
+  //   const currentDate = new Date();
+  //   const statusTimeStamp = new Date(job.statusTimeStamp || "");
+  //   const interviewDate = new Date(job.interviewDate || "");
+  //   const deadline = new Date(job.deadline || "");
+  //   const twoWeeksAgo = new Date(
+  //     currentDate.getTime() - 14 * 24 * 60 * 60 * 1000
+  //   );
 
-    const timeDifference =
-      (deadline.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
-    const timeForJob =
-      (interviewDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+  //   const timeDifference =
+  //     (deadline.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
+  //   const timeForJob =
+  //     (interviewDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
-    return (
-      (job.status === "Draft" && timeDifference <= 2 && timeDifference >= 0) ||
-      (job.status === "Draft" && timeDifference < 0) ||
-      (job.status === "waiting for an answer" &&
-        statusTimeStamp <= twoWeeksAgo) ||
-      (job.status === "interview booked" && timeForJob <= 2 && timeForJob >= 0)
-    );
-  };
+  //   return (
+  //     (job.status === "Draft" && timeDifference <= 2 && timeDifference >= 0) ||
+  //     (job.status === "Draft" && timeDifference < 0) ||
+  //     (job.status === "waiting for an answer" &&
+  //       statusTimeStamp <= twoWeeksAgo) ||
+  //     (job.status === "interview booked" && timeForJob <= 2 && timeForJob >= 0)
+  //   );
+  // };
 
   const handleCheckNotification = (job: fetchJobs) => {
     checkPendingStatus(job, addToast);
@@ -144,8 +133,8 @@ export const Jobs = () => {
           </div>
         ))}
       </div>
-      <div className="p-4 mt-6">
-        <div className="mb-4">
+      <div className="p-4 mt-6 ">
+        <div className="mb-4 ml-4">
           <div className="relative inline-block text-left">
             <button
               onClick={() => setIsDropdownOpen((prev) => !prev)}
@@ -155,7 +144,7 @@ export const Jobs = () => {
             </button>
             {isDropdownOpen && (
               <div className="absolute text-[#f4e4ba] mt-2 w-56 bg-[#5f7470] rounded-md shadow-lg z-10">
-                <ul className="py-1">
+                <ul className="">
                   <li>
                     <button
                       onClick={filterJobInterview}
@@ -205,32 +194,32 @@ export const Jobs = () => {
           />
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full border-separate border-spacing-0 hidden lg:table">
+        <div className="overflow-x-auto mr-4 ml-4 h-full">
+          <table className=" h-full table-auto w-full border-b border-[#5f7470] border-spacing-0 hidden lg:table">
             <thead>
               <tr>
-                <th className="border-b border-[#5f7470] p-2 text-left pl-5  text-black text-base">
+                <th className="border-b border-[#5f7470] text-left index-text  job-text">
                   Position
                 </th>
-                <th className="border-b border-[#5f7470] p-2  text-center text-black text-base">
+                <th className="border-b border-[#5f7470] p-2  text-center job-text">
                   Location
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
+                <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Status
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
+                <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Company
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
+                <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Link
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
+                <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Deadline
                 </th>
-                <th className="border-b  border-[#5f7470] p-2 text-center  text-black text-base">
+                <th className="border-b border-[#5f7470] p-2 text-center job-text">
                   Notifications
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base"></th>
+                <th className="border-b border-[#5f7470] p-2 text-center job-text"></th>
               </tr>
             </thead>
             <tbody>
@@ -239,24 +228,24 @@ export const Jobs = () => {
                   key={job.id}
                   className={
                     isOpacityChanged && job.id !== highlightedJobId
-                      ? "opacity-20 bg-opacity-100 bg-gray-250 shadow-lg"
+                      ? "opacity-10 bg-opacity-100 bg-gray-250 shadow-lg"
                       : ""
                   }
                   onClick={() => handleRowClick(job.id!)}
                 >
-                  <td className="border-b border-[#5f7470] border-t  text-left pl-5  text-gray-700  text-base">
+                  <td className="border-b border-[#5f7470] text-left pl-5 border-t  text-gray-700  text-base">
                     {job.position}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
+                  <td className="border-b border-[#5f7470] p-2 text-center border-t  text-gray-700  text-base">
                     {job.location}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
+                  <td className="border-b border-[#5f7470] p-2 text-center border-t  text-gray-700  text-base">
                     {job.status}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
+                  <td className="border-b border-[#5f7470] p-2 text-center border-t  text-gray-700  text-base">
                     {job.company}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
+                  <td className="border-b border-[#5f7470] p-2 text-center border-t  text-gray-700  text-base">
                     <a
                       href={job.link!}
                       target="_blank"
@@ -265,10 +254,10 @@ export const Jobs = () => {
                       View Job
                     </a>
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700 text-base">
+                  <td className="border-b border-[#5f7470] p-2 text-center border-t  text-gray-700 text-base">
                     {job.deadline}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-center">
+                  <td className="border-b border-[#5f7470] border-t  p-2 text-center">
                     {hasNotifications(job) && (
                       <button
                         onClick={() => handleCheckNotification(job)}
@@ -278,7 +267,7 @@ export const Jobs = () => {
                       </button>
                     )}
                   </td>
-                  <td className="border-b border-t border-[#5f7470] p-2 text-right">
+                  <td className="border-b border-[#5f7470] border-t  p-2 text-right">
                     <button className="p-0" onClick={() => setInfoJob(job)}>
                       <img
                         src="./information-button.png"
@@ -291,7 +280,7 @@ export const Jobs = () => {
                     </button>
 
                     <button
-                      className="ml-2 p-0 pr-5"
+                      className="ml-2"
                       onClick={() => handleDelete(job.id!)}
                     >
                       <img src="./trash.png" alt="Delete" className="w-6 h-6" />

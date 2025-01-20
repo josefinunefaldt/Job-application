@@ -9,6 +9,14 @@
   font-style: normal;
 }
 
+.job-text {
+  font-family: "League Spartan", serif;
+  font-optical-sizing: auto;
+  font-size: 18px;
+  font-weight: 600;
+  font-style: normal;
+  color: black;
+}
 h1 {
   font-family: "League Spartan", serif;
   font-optical-sizing: auto;

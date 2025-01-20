@@ -19,10 +19,17 @@ export const checkPendingStatus = (
     (interviewDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24);
 
   if (job.status === "Draft" && timeDifference <= 2 && timeDifference >= 0) {
-    addToast(
-      `Follow up on the job "${job.position}". Deadline in ${Math.ceil(timeDifference)} days!`,
-      "error"
-    );
+    if (timeDifference < 1) {
+      addToast(
+        `Apply for position "${job.position}". Deadline in ${Math.ceil(timeDifference)} day!`,
+        "error"
+      );
+    } else {
+      addToast(
+        `Apply for position "${job.position}". Deadline in ${Math.ceil(timeDifference)} days!`,
+        "error"
+      );
+    }
   } else if (job.status === "Draft" && timeDifference < 0) {
     addToast(`The deadline for "${job.position}" has passed.`, "error");
   }
@@ -32,7 +39,7 @@ export const checkPendingStatus = (
     statusTimeStamp <= twoWeeksAgo
   ) {
     addToast(
-      `Follow up on the job "${job.position}". It's been over two weeks since the status was updated.`,
+      `Follow up on the job "${job.position}". It's been over two weeks without reply.`,
       "info"
     );
   }
