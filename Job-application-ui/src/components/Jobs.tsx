@@ -44,14 +44,26 @@ export const Jobs = () => {
     setSelectedJob(job);
     setIsModalOpen(true);
   };
+  const fetchData = async () => {
+    try {
+      const data: fetchJobs[] = await FetchJobs();
+      setJobs(data ?? []);
+    } catch {
+      console.error("Error fetching jobs:");
+    }
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedJob(null);
+    setIsModalOpen(false);
+    setSelectedJob(null);
+    fetchData();
   };
 
   const handleCloseInfo = () => {
     setInfoJob(null);
+    fetchData();
   };
 
   const filterJobInterview = async () => {
@@ -233,7 +245,12 @@ export const Jobs = () => {
                       ? "opacity-10 bg-opacity-100 bg-gray-250 shadow-lg"
                       : ""
                   }
-                  onClick={() => handleRowClick(job.id!)}
+                  onClick={(e) => {
+                    if ((e.target as HTMLElement).closest(".delete-btn")) {
+                      return;
+                    }
+                    handleRowClick(job.id!);
+                  }}
                 >
                   <td className="border-b border-[#5f7470] text-left pl-5 border-t  text-gray-700  text-base">
                     {job.position}
@@ -282,8 +299,11 @@ export const Jobs = () => {
                     </button>
 
                     <button
-                      className="ml-2"
-                      onClick={() => handleDelete(job.id!)}
+                      className="ml-2 delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(job.id!);
+                      }}
                     >
                       <img src="./trash.png" alt="Delete" className="w-6 h-6" />
                     </button>
