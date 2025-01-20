@@ -17,12 +17,12 @@ function RouteComponent() {
       style={{ backgroundImage: "url(./bg.jpg)" }}
     >
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold mb-16  mt-[5%] text-[#5f7470] ">
+        <h1 className="text-4xl font-bold text-center mb-16 sm:text-5xl and md:text-6xl  mt-[5%] text-[#5f7470] ">
           Track your application process
         </h1>
         <div className="flex space-x-12 ">
           <button
-            className="hover:bg-[#FFCF56]  hover:text-[#5f7470] transition-all duration-200 ease-in-out btn rounded-full w-32 h-32 text-lg index-text flex border-0 text-[#F4E4BA]  bg-[#5f7470] items-center justify-center"
+            className="hover:bg-[#FFCF56]   hover:text-[#5f7470] transition-all duration-200 ease-in-out btn rounded-full w-32 h-32 text-lg index-text flex border-0 text-[#F4E4BA]  bg-[#5f7470] items-center justify-center"
             onClick={() => setIsModalOpen(true)}
           >
             ADD JOB
@@ -34,6 +34,7 @@ function RouteComponent() {
           </Link>
         </div>
       </div>
+
       <ModalForm
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
