@@ -13,6 +13,7 @@ export const Jobs = () => {
   const [infoJob, setInfoJob] = useState<fetchJobs | null>(null);
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,6 +71,18 @@ export const Jobs = () => {
     } catch (error) {
       console.error("Error filtering jobs:", error);
     }
+  };
+
+  const [highlightedJobId, setHighlightedJobId] = useState<number | null>(null);
+  const [isOpacityChanged, setIsOpacityChanged] = useState(false);
+
+  const handleRowClick = (jobId: number) => {
+    setHighlightedJobId(jobId);
+    setIsOpacityChanged(true);
+    setTimeout(() => {
+      setIsOpacityChanged(false);
+      setHighlightedJobId(null);
+    }, 5000);
   };
 
   const filterDraft = async () => {
@@ -133,35 +146,57 @@ export const Jobs = () => {
       </div>
       <div className="p-4 mt-6">
         <div className="mb-4">
+          <div className="relative inline-block text-left">
+            <button
+              onClick={() => setIsDropdownOpen((prev) => !prev)}
+              className="btn mr-2 border-0 text-[#F4E4BA] hover:bg-[#6b8279] hover:text-[#F4E4BA] transition-all duration-200 ease-in-out bg-[#5f7470]"
+            >
+              Filter ▾
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute text-[#f4e4ba] mt-2 w-56 bg-[#5f7470] rounded-md shadow-lg z-10">
+                <ul className="py-1">
+                  <li>
+                    <button
+                      onClick={filterJobInterview}
+                      className="block w-full text-left px-4 py-2 text-[#f4e4ba]  hover:bg-[#FFCF56] hover:text-[#5f7470] transition-all duration-200"
+                    >
+                      Interview booked
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={filterNoAnswer}
+                      className="block w-full text-left px-4 py-2 text-[#f4e4ba] hover:bg-[#FFCF56] hover:text-[#5f7470] transition-all duration-200"
+                    >
+                      Waiting for answer
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={filterDraft}
+                      className="block w-full text-left px-4 py-2 text-[#f4e4ba] hover:bg-[#FFCF56] hover:text-[#5f7470] transition-all duration-200"
+                    >
+                      Draft
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={reset}
+                      className="block w-full text-left px-4 py-2 text-[#f4e4ba] hover:bg-[#FFCF56] hover:text-[#5f7470] transition-all duration-200"
+                    >
+                      All
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
           <button
-            onClick={filterJobInterview}
-            className="btn mr-2  text-[#F4E4BA] hover:opacity-50 bg-[#5f7470]"
-          >
-            Job interview
-          </button>
-          <button
-            onClick={filterNoAnswer}
-            className="btn mr-2 text-[#F4E4BA] bg-[#5f7470]"
-          >
-            No answer
-          </button>
-          <button
-            onClick={filterDraft}
-            className="btn mr-2  text-[#F4E4BA]  bg-[#5f7470]"
-          >
-            Draft
-          </button>
-          <button
-            onClick={reset}
-            className="btn mr-2  text-[#F4E4BA] bg-[#5f7470]"
-          >
-            All
-          </button>
-          <button
-            className="btn bg-[#FFCF56] text-[#5f7470]"
+            className="btn bg-[#FFCF56] border-0  hover:bg-[#FFD76A] hover:text-[#5f7470] transition-all duration-200 ease-in-out text-[#5f7470]"
             onClick={() => setIsModalOpen(true)}
           >
-            Add Workplace
+            + Add application
           </button>
           <ModalForm
             isOpen={isModalOpen}
@@ -171,49 +206,57 @@ export const Jobs = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="table-auto w-full border-separate border-spacing-0">
+          <table className="table-auto w-full border-separate border-spacing-0 hidden lg:table">
             <thead>
               <tr>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2 text-left pl-5  text-black text-base">
                   Position
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2  text-center text-black text-base">
                   Location
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
                   Status
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
                   Company
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
                   Link
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base">
                   Deadline
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center">
+                <th className="border-b  border-[#5f7470] p-2 text-center  text-black text-base">
                   Notifications
                 </th>
-                <th className="border-b border-[#5f7470] p-2 text-center"></th>
+                <th className="border-b border-[#5f7470] p-2 text-center  text-black text-base"></th>
               </tr>
             </thead>
             <tbody>
               {jobs.map((job) => (
-                <tr key={job.id} className="text-center">
-                  <td className="border-b border-[#5f7470] p-2">
+                <tr
+                  key={job.id}
+                  className={
+                    isOpacityChanged && job.id !== highlightedJobId
+                      ? "opacity-20 bg-opacity-100 bg-gray-250 shadow-lg"
+                      : ""
+                  }
+                  onClick={() => handleRowClick(job.id!)}
+                >
+                  <td className="border-b border-[#5f7470] border-t  text-left pl-5  text-gray-700  text-base">
                     {job.position}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
                     {job.location}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
                     {job.status}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
                     {job.company}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700  text-base">
                     <a
                       href={job.link!}
                       target="_blank"
@@ -222,21 +265,21 @@ export const Jobs = () => {
                       View Job
                     </a>
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center  text-gray-700 text-base">
                     {job.deadline}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
+                  <td className="border-b border-t border-[#5f7470] p-2 text-center">
                     {hasNotifications(job) && (
                       <button
                         onClick={() => handleCheckNotification(job)}
-                        className="btn bg-[#FFCF56]"
+                        className="btn border-0 bg-[#FFCF56] hover:bg-[#FFD76A] hover:text-[#5f7470] transition-all duration-200 ease-in-out text-[#5f7470]"
                       >
                         Next step
                       </button>
                     )}
                   </td>
-                  <td className="border-b border-[#5f7470] p-2">
-                    <button className=" p-0" onClick={() => setInfoJob(job)}>
+                  <td className="border-b border-t border-[#5f7470] p-2 text-right">
+                    <button className="p-0" onClick={() => setInfoJob(job)}>
                       <img
                         src="./information-button.png"
                         alt="Info"
@@ -248,7 +291,7 @@ export const Jobs = () => {
                     </button>
 
                     <button
-                      className="ml-2 p-0"
+                      className="ml-2 p-0 pr-5"
                       onClick={() => handleDelete(job.id!)}
                     >
                       <img src="./trash.png" alt="Delete" className="w-6 h-6" />
@@ -258,6 +301,64 @@ export const Jobs = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="lg:hidden block">
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className={`flex flex-col bg-[#5f7470] p-4 mb-4 rounded-lg shadow-md ${isOpacityChanged && job.id !== highlightedJobId ? "opacity-50" : ""}`}
+            >
+              <div className="flex justify-between">
+                <h3 className="text-lg font-bold text-[#f4e4ba]">
+                  {job.position}
+                </h3>
+                <span className=" text-[#f4e4ba]">{job.status}</span>
+              </div>
+              <p className="text-[#f4e4ba]">
+                <strong>Location:</strong> {job.location}
+              </p>
+              <p className="text-[#f4e4ba]">
+                <strong>Company:</strong> {job.company}
+              </p>
+              <p className="text-[#f4e4ba]">
+                <strong>Deadline:</strong> {job.deadline}
+              </p>
+              <p className="text-[#f4e4ba]">
+                <strong>Link:</strong>{" "}
+                <a href={job.link!} target="_blank" rel="noopener noreferrer">
+                  Job link
+                </a>
+              </p>
+              <div className="flex items-center justify-between mt-4">
+                {hasNotifications(job) && (
+                  <button
+                    onClick={() => handleCheckNotification(job)}
+                    className="btn border-0 bg-[#FFCF56] hover:bg-[#FFD76A] hover:text-[#5f7470] transition-all duration-200 ease-in-out text-[#5f7470] px-4 py-2"
+                  >
+                    Next step
+                  </button>
+                )}
+                <div className="flex items-center">
+                  <button className="ml-2" onClick={() => setInfoJob(job)}>
+                    <img
+                      src="./information-button.png"
+                      alt="Info"
+                      className="w-6 h-6"
+                    />
+                  </button>
+                  <button className="ml-2" onClick={() => handleUpdate(job)}>
+                    <img src="./pen.png" alt="Edit" className="w-6 h-6" />
+                  </button>
+                  <button
+                    className="ml-2"
+                    onClick={() => handleDelete(job.id!)}
+                  >
+                    <img src="./trash.png" alt="Delete" className="w-6 h-6" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {infoJob && (
@@ -299,12 +400,12 @@ export const Jobs = () => {
               </p>
               {infoJob.interviewDate && (
                 <p className="  text-[#F4E4BA]">
-                  <strong>Interview Date:</strong> {infoJob.interviewDate}
+                  <strong>Interview date:</strong> {infoJob.interviewDate}
                 </p>
               )}
               <button
                 onClick={handleCloseInfo}
-                className="mt-4 btn bg-[#FFCF56] border-0 text-[#5f7470]"
+                className="mt-4 btn border-0 bg-[#FFCF56] hover:bg-[#FFD76A] hover:text-[#5f7470] transition-all duration-200 ease-in-out text-[#5f7470]"
               >
                 Close
               </button>

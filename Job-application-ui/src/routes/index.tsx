@@ -22,13 +22,13 @@ function RouteComponent() {
         </h1>
         <div className="flex space-x-12 ">
           <button
-            className=" hover:bg-[#FFCF56]  hover:text-[#5f7470] btn rounded-full w-32 h-32 text-lg index-text flex border-0 text-[#F4E4BA]  bg-[#5f7470] items-center justify-center"
+            className="hover:bg-[#FFCF56]  hover:text-[#5f7470] transition-all duration-200 ease-in-out btn rounded-full w-32 h-32 text-lg index-text flex border-0 text-[#F4E4BA]  bg-[#5f7470] items-center justify-center"
             onClick={() => setIsModalOpen(true)}
           >
             ADD JOB
           </button>
           <Link to="/guide">
-            <button className=" text-lg btn rounded-full index-text hover:bg-[#FFCF56]  hover:text-[#5f7470]  text-[#F4E4BA] border-0 bg-[#5f7470] w-32 h-32 flex items-center justify-center">
+            <button className=" text-lg btn rounded-full index-text hover:bg-[#FFCF56]  hover:text-[#5f7470] transition-all duration-200 ease-in-out  text-[#F4E4BA] border-0 bg-[#5f7470] w-32 h-32 flex items-center justify-center">
               GUIDE ME
             </button>
           </Link>

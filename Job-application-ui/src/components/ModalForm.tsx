@@ -96,33 +96,33 @@ const ModalForm: React.FC<ModalFormProps> = ({
 
   return (
     <div
-      className="fixed inset-0  bg-black bg-opacity-50 flex justify-center  items-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 "
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
     >
       <div
-        className="bg-[#5f7470]  bg-opacity-100 rounded-lg p-3  overflow-auto shadow-lg"
+        className="bg-[#5f7470] bg-opacity-100 rounded-lg p-4 overflow-auto shadow-lg w-full md:w-[600px] lg:w-[700px]"
         role="document"
       >
         <header className="mb-4">
           <h2
             id="modal-title"
-            className="  text-[#F4E4BA] index-text text-2xl font-bold"
+            className="text-[#F4E4BA] text-2xl font-bold text-center sm:text-left"
           >
             {existingJob ? "Edit Job" : "Add your job here"}
           </h2>
         </header>
         <form onSubmit={handleSubmit} className="space-y-6">
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold index-text  text-[#F4E4BA] ">
+            <legend className="text-lg font-semibold text-[#F4E4BA]">
               JOB DETAILS
             </legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="position"
-                  className=" text-[#F4E4BA] block text-sm font-medium"
+                  className="text-[#F4E4BA] block text-sm font-medium"
                 >
                   Position
                 </label>
@@ -140,7 +140,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div>
                 <label
                   htmlFor="company"
-                  className="block  text-[#F4E4BA] text-sm font-medium"
+                  className="block text-[#F4E4BA] text-sm font-medium"
                 >
                   Company
                 </label>
@@ -158,7 +158,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div>
                 <label
                   htmlFor="location"
-                  className="block  text-[#F4E4BA] text-sm font-medium"
+                  className="block text-[#F4E4BA] text-sm font-medium"
                 >
                   Location
                 </label>
@@ -176,7 +176,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div>
                 <label
                   htmlFor="link"
-                  className="block  text-[#F4E4BA] text-sm font-medium"
+                  className="block text-[#F4E4BA] text-sm font-medium"
                 >
                   Link
                 </label>
@@ -194,14 +194,14 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold  text-[#F4E4BA] index-text ">
+            <legend className="text-lg font-semibold text-[#F4E4BA]">
               CONTACT DETAILS
             </legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="contactPerson"
-                  className="block text-sm font-medium  text-[#F4E4BA]"
+                  className="block text-sm font-medium text-[#F4E4BA]"
                 >
                   Contact person
                 </label>
@@ -219,7 +219,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div>
                 <label
                   htmlFor="email"
-                  className="block  text-[#F4E4BA] text-sm font-medium"
+                  className="block text-[#F4E4BA] text-sm font-medium"
                 >
                   Email
                 </label>
@@ -237,14 +237,14 @@ const ModalForm: React.FC<ModalFormProps> = ({
             </div>
           </fieldset>
           <fieldset className="border rounded-lg p-4">
-            <legend className="text-lg font-semibold index-text  text-[#F4E4BA] ">
+            <legend className="text-lg font-semibold text-[#F4E4BA]">
               STATUS AND DEADLINE
             </legend>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="status"
-                  className="block text-sm font-medium  text-[#F4E4BA]"
+                  className="block text-sm font-medium text-[#F4E4BA]"
                 >
                   Status
                 </label>
@@ -271,7 +271,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div>
                 <label
                   htmlFor="deadline"
-                  className="block  text-[#F4E4BA] text-sm font-medium"
+                  className="block text-[#F4E4BA] text-sm font-medium"
                 >
                   Deadline
                 </label>
@@ -279,7 +279,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                   type="date"
                   id="deadline"
                   name="deadline"
-                  className="input input-bordered w-full bg-[#F4E4BA] "
+                  className="input input-bordered w-full bg-[#F4E4BA]"
                   value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
                   required
@@ -290,7 +290,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               <div className="mt-4">
                 <label
                   htmlFor="interviewDateTime"
-                  className="block text-sm font-medium  text-[#F4E4BA]"
+                  className="block text-sm font-medium text-[#F4E4BA]"
                 >
                   Interview Date & Time
                 </label>
@@ -310,14 +310,14 @@ const ModalForm: React.FC<ModalFormProps> = ({
           <footer className="flex justify-end gap-4">
             <button
               type="button"
-              className="btn bg-[#FFCF56] border-0 text-[#5f7470]"
+              className="btn border-0 bg-[#FFCF56] hover:bg-[#FFD76A] hover:text-[#5f7470] transition-all duration-200 ease-in-out text-[#5f7470]"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="btn text-[#5f7470] border-0  bg-[#F4E4BA]"
+              className="btn text-[#5f7470] border-0 bg-[#F4E4BA] hover:bg-[#E0C39A] transition-all duration-200 ease-in-out"
             >
               Submit
             </button>

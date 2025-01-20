@@ -61,13 +61,13 @@ function RouteComponent() {
             HOME
           </Link>
           <Link
-            className="hover:text-[#FFCF56] index-text text-[#F4E4BA]"
+            className="hover:text-[#FFCF56] index-text text-[#F4E4BA] transition-all duration-200 ease-in-out"
             to="/jobs"
           >
             APPLICATIONS
           </Link>
           <Link
-            className="hover:text-[#FFCF56] index-text text-[#F4E4BA]"
+            className="hover:text-[#FFCF56] index-text text-[#F4E4BA] transition-all duration-200 ease-in-out"
             to="/guide"
           >
             GUIDE
